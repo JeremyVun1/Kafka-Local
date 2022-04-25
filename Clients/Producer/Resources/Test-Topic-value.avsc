@@ -1,0 +1,40 @@
+{
+    "type": "record",
+    "name": "TestEvent",
+    "namespace": "Models.Kafka.Test",
+    "fields": [
+        {
+            "name": "KafkaHeader",
+            "type": {
+                "name": "EventHeader",
+                "type": "record",
+                "fields": [
+                    {
+                        "name": "CorrelationId",
+                        "type": [
+                            "null",
+                            "string"
+                        ],
+                        "default": null
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Property1",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        },
+        {
+            "name": "Property2",
+            "type": [
+                "null",
+                "string"
+            ],
+            "default": null
+        }
+    ]
+}

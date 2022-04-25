@@ -1,0 +1,14 @@
+# dotnet
+obj
+bin
+appsettings.secret.json
+
+# keys
+*.jks
+*.crt
+*.csr
+*.key
+*.srl
+*.pem
+*.pkcs12
+thunder-tests/
