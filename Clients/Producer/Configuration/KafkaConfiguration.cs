@@ -2,6 +2,7 @@ using Confluent.SchemaRegistry;
 using Confluent.Kafka;
 using Confluent.SchemaRegistry.Serdes;
 using Confluent.Kafka.SyncOverAsync;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Producer.Configuration;
 

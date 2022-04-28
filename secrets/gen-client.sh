@@ -32,12 +32,11 @@ openssl x509 -req -CA ../ca-public/root.crt -CAkey ../ca-private/root.key -in ${
 #openssl req -new -key ${component}.key -out ${component}.csr -subj "/CN=${component}/OU=${OU}/O=${O}/L=${L}/ST=${ST}/C=${C}" -passout pass:$PASSWORD
 #openssl x509 -req -CA root.crt -CAkey root.key -in ${component}.csr -out ${component}.crt -CAcreateserial -passin pass:$PASSWORD
 
+echo "[${component}] Creating p12"
+openssl pkcs12 -export -in ${component}.crt -inkey ${component}.key -out ${component}.p12 -passin pass:$PASSWORD -passout pass:$PASSWORD -name ${component} -CAfile ../ca-public/root.crt -caname root -chain
+
 echo "[${component}] Generating JKS"
-openssl pkcs12 -inkey ${component}.key -in ${component}.crt -export -out ${component}.pkcs12 -passin pass:$PASSWORD -password pass:$PASSWORD -name ${component}
-
-keytool -importkeystore -srckeystore ${component}.pkcs12 -srcstoretype pkcs12 -srcstorepass $PASSWORD -destkeystore ${component}.jks -deststorepass $PASSWORD -keypass $PASSWORD
-
-keytool -noprompt -keystore ${component}.jks -alias CARoot -import -file ../ca-public/root.crt -storepass $PASSWORD -keypass $PASSWORD
+keytool -importkeystore -srckeystore ${component}.p12 -srcstoretype pkcs12 -srcstorepass $PASSWORD -destkeystore ${component}.jks -deststorepass $PASSWORD -keypass $PASSWORD
 
 export MSYS_NO_PATHCONV=0
 

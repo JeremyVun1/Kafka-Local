@@ -41,14 +41,21 @@ public class TestProducerService<TValue> : IProducerService
         var obj = JsonConvert.DeserializeObject<TValue>(request.Value);
         _logger.LogInformation("{obj}", obj);
 
-        var result = await _producer.ProduceAsync(topicName, new Message<string, TValue>()
+        try
         {
-            Key = Guid.NewGuid().ToString(),
-            Value = obj
-        });
+            var result = await _producer.ProduceAsync(topicName, new Message<string, TValue>()
+            {
+                Key = Guid.NewGuid().ToString(),
+                Value = obj
+            });
 
-        _logger.LogInformation("status: {status}", result.Status);
-
-        return result.Status == PersistenceStatus.Persisted;
+            _logger.LogInformation("status: {status}", result.Status);
+            return result.Status == PersistenceStatus.Persisted;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ex}", ex);
+            return false;
+        }
     }
 }

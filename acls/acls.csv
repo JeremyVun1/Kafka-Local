@@ -1,3 +1,2 @@
 KafkaPrincipal|ResourceType|PatternType|ResourceName|Operation|PermissionType|Host
-User:CN=myconsumer,OU=TestOrg,O=TestOrg,L=Sydney,ST=NSW,C=AU|Topic|LITERAL|Product-Application-Status-Change-BDA|Read|Allow|*
-User:CN=myproducer,OU=TestOrg,O=TestOrg,L=Sydney,ST=NSW,C=AU|Topic|LITERAL|Product-Application-Status-Change-BDA|Write|Allow|*
+User:*|Topic|LITERAL|Test-Topic|ALL|Allow|*

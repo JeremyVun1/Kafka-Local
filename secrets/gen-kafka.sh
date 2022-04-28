@@ -28,7 +28,7 @@ keytool -noprompt \
 	-keypass $PASSWORD
 
 # Generate jks for each component
-components=("broker" "schema-registry" "control-center" "rest-proxy" "admin-client")
+components=("zookeeper" "broker" "schema-registry" "control-center" "rest-proxy" "admin-client")
 for component in ${components[@]}; do
 	cd ..
 	rm -rf ${component}
@@ -47,12 +47,11 @@ for component in ${components[@]}; do
 	echo "[${component}] Generating CRT"
 	openssl x509 -req -CA ../ca-public/root.crt -CAkey ../ca-private/root.key -in ${component}.csr -out ${component}.crt -CAcreateserial -passin pass:$PASSWORD
 
+	echo "[${component}] Creating p12"
+	openssl pkcs12 -export -in ${component}.crt -inkey ${component}.key -out ${component}.p12 -passin pass:$PASSWORD -passout pass:$PASSWORD -name ${component} -CAfile ../ca-public/root.crt -caname root -chain
+
 	echo "[${component}] Creating JKS"
-	openssl pkcs12 -inkey ${component}.key -in ${component}.crt -export -out ${component}.pkcs12 -passin pass:$PASSWORD -password pass:$PASSWORD -name ${component}
-
-	keytool -importkeystore -srckeystore ${component}.pkcs12 -srcstoretype pkcs12 -srcstorepass $PASSWORD -destkeystore ${component}.jks -deststorepass $PASSWORD -keypass $PASSWORD
-
-	keytool -noprompt -keystore ${component}.jks -alias CARoot -import -file ../ca-public/root.crt -storepass $PASSWORD -keypass $PASSWORD
+	keytool -importkeystore -srckeystore ${component}.p12 -srcstoretype pkcs12 -srcstorepass $PASSWORD -destkeystore ${component}.jks -deststorepass $PASSWORD -keypass $PASSWORD
 done
 
 export MSYS_NO_PATHCONV=0

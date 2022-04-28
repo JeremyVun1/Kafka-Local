@@ -10,5 +10,5 @@ appsettings.secret.json
 *.key
 *.srl
 *.pem
-*.pkcs12
+*.p12
 thunder-tests/
