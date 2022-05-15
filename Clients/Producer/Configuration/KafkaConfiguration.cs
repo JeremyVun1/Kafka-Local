@@ -25,6 +25,16 @@ public static class KafkaConfiguration
             var producerConfig = new ProducerConfig();
             config.GetRequiredSection("Kafka:Producer").Bind(producerConfig);
 
+            var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+            var certs = store.Certificates;
+            
+            foreach (var cert in certs)
+            {
+                Console.WriteLine(cert.SubjectName.Name);
+                Console.WriteLine(cert.Thumbprint);
+            }
+
             var schemaRegistry = provider.GetRequiredService<ISchemaRegistryClient>();
 
             return new ProducerBuilder<string, TValue>(producerConfig)
